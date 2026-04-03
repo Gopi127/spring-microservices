@@ -7,4 +7,6 @@ public interface OrderService {
 
 	OrderResponseDto placeOrder(OrderRequestDto orderRequestDto);
 
+	OrderResponseDto updateOrderStatus(long orderId, String status);
+
 }
