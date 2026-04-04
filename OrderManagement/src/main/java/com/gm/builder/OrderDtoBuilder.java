@@ -15,6 +15,7 @@ public class OrderDtoBuilder {
 
 	public static OrderResponseDto buildOrderResponseFromOrder(Order order) {
 		return OrderResponseDto.builder()
+						.orderId(order.getOrderId())
 						.status(order.getStatus())
 						.orderPrice(order.getOrderPrice())
 						.orderItems(buildOrderItemResponseDtos(order.getOrderItems()))

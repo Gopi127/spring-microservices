@@ -1,11 +1,13 @@
 package com.gm.service.impl;
 
 import org.jspecify.annotations.Nullable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.gm.builder.OrderBuilder;
 import com.gm.builder.OrderDtoBuilder;
+import com.gm.clients.RestaurantClient;
 import com.gm.dao.OrderRepository;
 import com.gm.dto.OrderRequestDto;
 import com.gm.dto.OrderResponseDto;
@@ -20,9 +22,13 @@ public class OrderServiceImpl implements OrderService {
 	
 	public final RestTemplate restTemplate;
 	
-	public OrderServiceImpl(OrderRepository orderRepository, RestTemplate restTemplate) {
+	public final RestaurantClient restaurantClient;
+	
+	public OrderServiceImpl(OrderRepository orderRepository, RestTemplate restTemplate, RestaurantClient
+ restaurantClient) {
 		this.orderRepository = orderRepository;
 		this.restTemplate = restTemplate;
+		this.restaurantClient = restaurantClient;
 	}
 
 	@Override
@@ -58,7 +64,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	private String fetchRestaurantName(Order order) {
-		String restaurantName = restTemplate.getForObject("http://localhost:8003/restaurants/name/" + order.getRestaurantId(), String.class);
+		String restaurantName = restTemplate.getForObject("http://RestaurantManagement/restaurants/name/" + order.getRestaurantId(), String.class);
 		return restaurantName;
+	}
+
+	@Override
+	public ResponseEntity<String> getRestaurantName(long restaurantId) {
+		return restaurantClient.getRestaurantNameById(restaurantId);
 	}
 }

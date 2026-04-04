@@ -1,5 +1,8 @@
 package com.gm.controller;
 
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,9 @@ public class RestaurantController {
 	
 	public final RestaurantService restaurantService;
 	
+	@Autowired
+	public Environment environment;
+	
 	public RestaurantController(RestaurantService restaurantService) {
 		this.restaurantService = restaurantService;
 	}
@@ -39,7 +45,9 @@ public class RestaurantController {
 	@GetMapping("/name/{restaurantId}")
 	public ResponseEntity<String> getRestaurantNameById(@PathVariable( name = "restaurantId" ) long id) {
 		RestaurantResponseDto restaurantResponseDto = restaurantService.getRestaurantById(id);
-		return ResponseEntity.status(HttpStatus.OK).body(restaurantResponseDto.getRestaurantName());
+		@Nullable
+		String port = environment.getProperty("local.server.port");
+		return ResponseEntity.status(HttpStatus.OK).body(restaurantResponseDto.getRestaurantName() + port);
 	}
 }
 
