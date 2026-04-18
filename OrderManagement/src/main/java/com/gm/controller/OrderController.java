@@ -40,5 +40,10 @@ public class OrderController {
 	public ResponseEntity<String> getRestaurantName(@PathVariable(name = "id") long restaurantId){
 		return orderService.getRestaurantName(restaurantId)
 ;	}
+	
+	@GetMapping("/restaurant/name/{restaurantId}")
+	public String getRestaurantNameById(@PathVariable( name="restaurantId") long restaurantId) {
+		return orderService.getRestaurantNameById(restaurantId);
+	}
 
 }

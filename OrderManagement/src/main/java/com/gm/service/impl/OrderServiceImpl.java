@@ -15,6 +15,8 @@ import com.gm.exceptions.OrderNotFound;
 import com.gm.model.Order;
 import com.gm.service.OrderService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 	
@@ -71,5 +73,16 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public ResponseEntity<String> getRestaurantName(long restaurantId) {
 		return restaurantClient.getRestaurantNameById(restaurantId);
+	}
+
+	@Override
+	@CircuitBreaker( name = "restaurantManagementCB", fallbackMethod = "fallBackForRestaurantName")
+	public String getRestaurantNameById(long restaurantId) {
+		return restTemplate.getForObject("http://RestaurantManagement/restaurants/name/" + restaurantId, String.class);
+
+	}
+	
+	public String fallBackForRestaurantName(long restaurantId, Throwable throwable) {
+		return "Restaurant server is down";
 	}
 }

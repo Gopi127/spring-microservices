@@ -13,4 +13,6 @@ public interface OrderService {
 
 	ResponseEntity<String> getRestaurantName(long restaurantId);
 
+	String getRestaurantNameById(long restaurantId);
+
 }
